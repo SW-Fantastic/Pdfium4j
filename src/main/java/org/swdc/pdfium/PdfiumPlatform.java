@@ -38,7 +38,7 @@ public class PdfiumPlatform {
         if (osName.contains("windows")) {
             libSubfix = "dll";
             resourceName = "/plafromPdfium/" + "windows-" + osArch + ".zip";
-        } else if (osName.contains("macos")) {
+        } else if (osName.contains("mac")) {
             libPrefix = "lib";
             libSubfix = "dylib";
             resourceName = "/plafromPdfium/" + "macos-" + osArch + ".zip";
