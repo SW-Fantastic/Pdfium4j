@@ -1,10 +1,7 @@
 //#define _CRT_SECURE_NO_WARNINGS
 
-#include "jni.h"
+#include "Platform.h"
 #include "PDFBitmapImpl.h"
-#include "pdfium/include/fpdfview.h"
-
-#pragma comment(lib, "pdfium/lib/pdfium.dll.lib")
 
 /*
  * Class:     org_swdc_pdfium_internal_PDFBitmapImpl

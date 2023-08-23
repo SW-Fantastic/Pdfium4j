@@ -1,10 +1,7 @@
 #include <stdlib.h>
 
-#include "./jni.h"
-#include "./PDFDocumentImpl.h"
-
-#include "../pdfium_universal/include/fpdf_doc.h"
-#include "../pdfium_universal/include/fpdfview.h"
+#include "Platform.h"
+#include "PDFDocumentImpl.h"
 
 
 JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void* reserved) {
@@ -113,10 +110,10 @@ JNIEXPORT jstring JNICALL Java_org_swdc_pdfium_internal_PDFDocumentImpl_getMetad
       (*env)->ReleaseStringUTFChars(env,tag,text);
       return NULL;
     }
-    uint16_t* buffer = (uint16_t*)malloc(sizeof(uint16_t) * length);
+    char16_t* buffer = (char16_t*)malloc(sizeof(char16_t) * length);
     FPDF_GetMetaText(doc,text,buffer,length);
     (*env)->ReleaseStringUTFChars(env,tag,text);
-    jstring str = (*env)->NewString(env,(jchar*)buffer,(length / sizeof(uint16_t)) - 1);
+    jstring str = (*env)->NewString(env,(jchar*)buffer,(length / sizeof(char16_t)) - 1);
     free(buffer);
 
     return str;
@@ -192,9 +189,9 @@ JNIEXPORT jstring JNICALL Java_org_swdc_pdfium_internal_PDFDocumentImpl_getBookM
     if (length == 0){
       return NULL;
     }
-    uint16_t* buffer = (uint16_t*)malloc(sizeof(uint16_t) * length);
+    char16_t* buffer = (char16_t*)malloc(sizeof(char16_t) * length);
     FPDFBookmark_GetTitle(bookMark,buffer,length);
-    jstring str = (*env)->NewString(env,(jchar*)buffer,(length / sizeof(uint16_t)) - 1);
+    jstring str = (*env)->NewString(env,(jchar*)buffer,(length / sizeof(char16_t)) - 1);
     free(buffer);
     return str;
   }

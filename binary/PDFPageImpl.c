@@ -1,11 +1,7 @@
-#include "jni.h"
 #include <stdlib.h>
-#include "pdfium/include/fpdf_edit.h"
-#include "pdfium/include/fpdf_doc.h"
-#include "pdfium/include/fpdfview.h"
+#include "Platform.h"
 #include "PDFPageImpl.h"
 
-#pragma comment(lib, "pdfium/lib/pdfium.dll.lib")
 /*
  * Class:     org_swdc_pdfium_internal_PDFPageImpl
  * Method:    closePage

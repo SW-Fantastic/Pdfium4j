@@ -1,8 +1,0 @@
-is_component_build = false
-is_debug = false
-mac_deployment_target = "10.13.0"
-pdf_enable_v8 = false
-pdf_enable_xfa = false
-pdf_is_standalone = true
-target_os = "mac"
-treat_warnings_as_errors = false
