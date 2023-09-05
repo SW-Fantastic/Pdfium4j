@@ -15,7 +15,7 @@ public class DocumentTest {
 
     public static void main(String[] args) throws IOException {
 
-        PdfiumPlatform.initializePdfium(new File("platform"));
+        PdfiumPlatform.initializePdfium(new File("assets"));
 
         PdfiumDocument document = new PdfiumDocument(new File("./test2.pdf"));
         System.out.println("The document has : " + document.getPageCount() + " pages");

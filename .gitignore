@@ -1,7 +1,8 @@
-/platform/
+/assets/
 /binary/.vscode/
 /binary/windows/pdfiumSDK/.vs/
 /binary/windows/pdfiumSDK/x64/
 /pdfium.iml
 /target/
 /binary/Build/
+/assets/

@@ -22,7 +22,8 @@ using this method to initialize the pdfium sdk:
 
 ```java
 // where should the library extract and load the native library
-PdfiumPlatform.initializePdfium(new File("platform"));
+PdfiumPlatform.initializePdfium(new File("assets"));
+// you can see library in this folder  "assets/platform/pdfium"
 ```
 
 and then , you can create PdfiumDocument and do anything you need.

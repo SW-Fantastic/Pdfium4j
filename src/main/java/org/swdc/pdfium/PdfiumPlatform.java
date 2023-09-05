@@ -18,7 +18,12 @@ public class PdfiumPlatform {
             "amd64","x64","x86_64"
     );
 
-    public static void initializePdfium(File platformFolder) {
+    /**
+     * Provides asset folder, will extract pdfium native library into the subfolder in it.
+     * @param assetFolder
+     */
+    public static void initializePdfium(File assetFolder) {
+        File platformFolder = new File(assetFolder.getAbsolutePath() + File.separator + "platform" + File.separator + "pdfium");
         if (!platformFolder.exists()) {
             if(!platformFolder.mkdirs()) {
                 throw new RuntimeException("can not create native library folder: " + platformFolder.getAbsolutePath());
