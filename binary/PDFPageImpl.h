@@ -7,6 +7,23 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+/*
+ * Class:     org_swdc_pdfium_internal_PDFPageImpl
+ * Method:    createPage
+ * Signature: (JIDD)J
+ */
+JNIEXPORT jlong JNICALL Java_org_swdc_pdfium_internal_PDFPageImpl_createPage
+  (JNIEnv *, jclass, jlong, jint, jdouble, jdouble);
+
+/*
+ * Class:     org_swdc_pdfium_internal_PDFPageImpl
+ * Method:    removePage
+ * Signature: (JI)V
+ */
+JNIEXPORT void JNICALL Java_org_swdc_pdfium_internal_PDFPageImpl_removePage
+  (JNIEnv *, jclass, jlong, jint);
+
 /*
  * Class:     org_swdc_pdfium_internal_PDFPageImpl
  * Method:    closePage
@@ -46,6 +63,22 @@ JNIEXPORT jint JNICALL Java_org_swdc_pdfium_internal_PDFPageImpl_getWidth
  */
 JNIEXPORT jint JNICALL Java_org_swdc_pdfium_internal_PDFPageImpl_getHeight
   (JNIEnv *, jclass, jlong);
+
+/*
+ * Class:     org_swdc_pdfium_internal_PDFPageImpl
+ * Method:    getRotation
+ * Signature: (J)I
+ */
+JNIEXPORT jint JNICALL Java_org_swdc_pdfium_internal_PDFPageImpl_getRotation
+  (JNIEnv *, jclass, jlong);
+
+/*
+ * Class:     org_swdc_pdfium_internal_PDFPageImpl
+ * Method:    setRotation
+ * Signature: (JI)V
+ */
+JNIEXPORT void JNICALL Java_org_swdc_pdfium_internal_PDFPageImpl_setRotation
+  (JNIEnv *, jclass, jlong, jint);
 
 /*
  * Class:     org_swdc_pdfium_internal_PDFPageImpl

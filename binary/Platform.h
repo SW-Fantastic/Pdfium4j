@@ -5,6 +5,7 @@
 #include "external/pdfium/include/fpdf_doc.h"
 #include "external/pdfium/include/fpdf_edit.h"
 #include "external/pdfium/include/fpdfview.h"
+#include "external/pdfium/include/fpdf_save.h"
 
 #ifdef _WIN32
 

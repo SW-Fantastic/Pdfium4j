@@ -7,6 +7,16 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+/*
+ * Class:     org_swdc_pdfium_internal_PDFDocumentImpl
+ * Method:    createDocument
+ * Signature: ()J
+ */
+JNIEXPORT jlong JNICALL Java_org_swdc_pdfium_internal_PDFDocumentImpl_createDocument
+  (JNIEnv *, jclass);
+
+
 /*
  * Class:     org_swdc_pdfium_internal_PDFDocumentImpl
  * Method:    loadDocument

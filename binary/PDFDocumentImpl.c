@@ -26,6 +26,22 @@ JNIEXPORT void JNI_OnUnload(JavaVM* vm, void* reserved) {
 
 /*
  * Class:     org_swdc_pdfium_internal_PDFDocumentImpl
+ * Method:    createDocument
+ * Signature: ()J
+ */
+JNIEXPORT jlong JNICALL Java_org_swdc_pdfium_internal_PDFDocumentImpl_createDocument
+  (JNIEnv * env, jclass clazz) {
+
+    FPDF_DOCUMENT doc = FPDF_CreateNewDocument();
+    if(!doc) {
+      return -1;
+    }
+    return (jlong)(intptr_t)(doc);
+  }
+
+
+/*
+ * Class:     org_swdc_pdfium_internal_PDFDocumentImpl
  * Method:    loadDocument
  * Signature: (Ljava/lang/String;)J
  */

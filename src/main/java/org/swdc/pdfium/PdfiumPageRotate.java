@@ -15,4 +15,13 @@ public enum PdfiumPageRotate {
     public int getValue() {
         return value;
     }
+
+    public static PdfiumPageRotate of(int val) {
+        for (PdfiumPageRotate v: values()) {
+            if (v.value == val) {
+                return v;
+            }
+        }
+        return null;
+    }
 }

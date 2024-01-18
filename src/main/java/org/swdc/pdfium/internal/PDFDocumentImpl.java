@@ -3,6 +3,12 @@ package org.swdc.pdfium.internal;
 public class PDFDocumentImpl {
 
     /**
+     * 创建新的PDF文档，返回Pdfium的Document指针。
+     * @return Document pointer
+     */
+    public static native long createDocument();
+
+    /**
      * 载入PDF文件，返回Pdfium的指针
      * @param absolutePath 文件路径
      * @return document pointer

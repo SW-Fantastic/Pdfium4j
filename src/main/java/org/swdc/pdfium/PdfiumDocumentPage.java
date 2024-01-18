@@ -1,9 +1,12 @@
 package org.swdc.pdfium;
 
 import org.swdc.pdfium.internal.PDFPageImpl;
+import org.swdc.pdfium.internal.PDFPageObjectImpl;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PdfiumDocumentPage implements Closeable {
 
@@ -11,10 +14,13 @@ public class PdfiumDocumentPage implements Closeable {
     private int pageIndex = -1;
     private PdfiumDocument document;
 
+    private Map<Integer,PdfiumPageObject> objectMap;
+
     PdfiumDocumentPage(PdfiumDocument document, long pointer, int pageIndex) {
         this.pointer = pointer;
         this.pageIndex = pageIndex;
         this.document = document;
+        this.objectMap = new HashMap<>();
     }
 
     private void checkState() throws IOException {
@@ -74,6 +80,24 @@ public class PdfiumDocumentPage implements Closeable {
         return renderPage(1, rotate);
     }
 
+    public PdfiumPageRotate getPageRotate() throws IOException {
+        checkState();
+        int val = PDFPageImpl.getRotation(pointer);
+        return PdfiumPageRotate.of(val);
+    }
+
+    public void setPageRotate(PdfiumPageRotate rotate) throws IOException {
+        checkState();
+        if (rotate == null) {
+            return;
+        }
+        PDFPageImpl.setRotation(pointer,rotate.getValue());
+    }
+
+    void setPageIndex(int pageIndex) {
+        this.pageIndex = pageIndex;
+    }
+
     public String getTitle() throws IOException {
         checkState();
         if (document.getPointer() == null || document.getPointer() == 0 || document.getPointer() == -1) {
@@ -108,6 +132,34 @@ public class PdfiumDocumentPage implements Closeable {
 
     Long getPointer() {
         return pointer;
+    }
+
+    // ----- Page Objects ------ //
+    public int getObjectCounts() throws IOException {
+        checkState();
+        return PDFPageObjectImpl.getObjectCount(pointer);
+    }
+
+    public PdfiumPageObject getPageObject(int objectIndex) throws IOException {
+        checkState();
+        if (objectMap.containsKey(objectIndex)) {
+            return objectMap.get(objectIndex);
+        }
+        if (objectIndex < 0 || objectIndex > getObjectCounts()) {
+            return null;
+        }
+        long pointer = PDFPageObjectImpl
+                .getPageObject(this.pointer,objectIndex);
+        if (pointer <= 0) {
+            return null;
+        }
+        PdfiumPageObject object = new PdfiumPageObject(this, pointer,objectIndex);
+        objectMap.put(objectIndex,object);
+        return object;
+    }
+
+    void closeObject(int objectIndex) {
+        objectMap.remove(objectIndex);
     }
 
     public int getPageIndex() {

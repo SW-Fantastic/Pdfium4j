@@ -4,6 +4,42 @@
 
 /*
  * Class:     org_swdc_pdfium_internal_PDFPageImpl
+ * Method:    createPage
+ * Signature: (JIDD)J
+ */
+JNIEXPORT jlong JNICALL Java_org_swdc_pdfium_internal_PDFPageImpl_createPage
+  (JNIEnv * env, jclass clazz, jlong pointer, jint index, jdouble width, jdouble height) {
+
+    if(pointer == 0 || pointer == -1) {
+      return 0;
+    }
+    FPDF_DOCUMENT doc = (FPDF_DOCUMENT)pointer;
+    FPDF_PAGE page = FPDFPage_New(doc,index,width,height);
+    if(page != NULL) {
+      return (jlong)(intptr_t)(page);
+    }
+    return 0;
+
+  }
+
+/*
+ * Class:     org_swdc_pdfium_internal_PDFPageImpl
+ * Method:    removePage
+ * Signature: (JJ)V
+ */
+JNIEXPORT void JNICALL Java_org_swdc_pdfium_internal_PDFPageImpl_removePage
+  (JNIEnv * env, jclass clazz, jlong documentPointer, jint pageIndex) {
+
+    if(documentPointer == 0 || documentPointer == -1 || pageIndex == 0 || pageIndex == -1) {
+      return;
+    }
+
+    FPDF_DOCUMENT doc = (FPDF_DOCUMENT)documentPointer;
+    FPDFPage_Delete(doc, pageIndex);
+  }
+
+/*
+ * Class:     org_swdc_pdfium_internal_PDFPageImpl
  * Method:    closePage
  * Signature: (J)J
  */
@@ -74,6 +110,37 @@ JNIEXPORT jint JNICALL Java_org_swdc_pdfium_internal_PDFPageImpl_getHeight
     }
     FPDF_PAGE page = (FPDF_PAGE)pointer;
     return (jint)FPDF_GetPageHeight(page);
+  }
+
+/*
+ * Class:     org_swdc_pdfium_internal_PDFPageImpl
+ * Method:    getRotation
+ * Signature: (J)I
+ */
+JNIEXPORT jint JNICALL Java_org_swdc_pdfium_internal_PDFPageImpl_getRotation
+  (JNIEnv * env, jclass clazz, jlong pointer) {
+
+    if(pointer == 0 || pointer == -1) {
+        return 0;
+    }
+    FPDF_PAGE page = (FPDF_PAGE)pointer;
+    return FPDFPage_GetRotation(page);
+
+  }
+
+/*
+ * Class:     org_swdc_pdfium_internal_PDFPageImpl
+ * Method:    setRotation
+ * Signature: (JI)I
+ */
+JNIEXPORT void JNICALL Java_org_swdc_pdfium_internal_PDFPageImpl_setRotation
+  (JNIEnv * env, jclass clazz, jlong pointer, jint rotate) {
+
+    if(pointer == 0 || pointer == -1) {
+        return;
+    }
+    FPDF_PAGE page = (FPDF_PAGE)pointer;
+    FPDFPage_SetRotation(page,rotate);
   }
 
 /*

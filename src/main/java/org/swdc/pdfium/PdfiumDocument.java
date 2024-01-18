@@ -1,16 +1,16 @@
 package org.swdc.pdfium;
 
 import org.swdc.pdfium.internal.PDFDocumentImpl;
+import org.swdc.pdfium.internal.PDFOutputStream;
 import org.swdc.pdfium.internal.PDFPageImpl;
+import org.swdc.pdfium.internal.PDFWriterImpl;
 
-import java.io.Closeable;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class PdfiumDocument implements Closeable {
 
@@ -27,6 +27,90 @@ public class PdfiumDocument implements Closeable {
             throw new IOException("failed to load document: " + theFile.getAbsolutePath());
         }
     }
+
+    public PdfiumDocument() throws IOException {
+
+        pointer = PDFDocumentImpl.createDocument();
+        if (pointer == -1) {
+            throw new IOException("failed to create a new document.");
+        }
+
+    }
+
+    public boolean removePage(int page) throws IOException {
+        checkState();
+        if (page < 0 || page >= getPageCount()) {
+            return false;
+        }
+        if (loaded.containsKey(page)) {
+            PdfiumDocumentPage target = loaded.get(page);
+            return removePage(target);
+        }
+        PDFPageImpl.removePage(
+                pointer,page
+        );
+
+        List<PdfiumDocumentPage> pages = loaded.keySet().stream()
+                .filter(k -> k > page)
+                .map(loaded::get)
+                .collect(Collectors.toList());
+        pages.forEach(p -> loaded.remove(p.getPageIndex()));
+        for (PdfiumDocumentPage prefPage: pages) {
+            prefPage.setPageIndex(prefPage.getPageIndex() - 1);
+            loaded.put(prefPage.getPageIndex(),prefPage);
+        }
+        return true;
+    }
+
+    public boolean removePage(PdfiumDocumentPage page) throws IOException {
+        checkState();
+        if (page == null) {
+            return false;
+        }
+        int pageIndex = page.getPageIndex();
+        page.close();
+
+        PDFPageImpl.removePage(
+                pointer,pageIndex
+        );
+
+        List<PdfiumDocumentPage> pages = loaded.keySet().stream()
+                .filter(k -> k > pageIndex)
+                .map(loaded::get)
+                .collect(Collectors.toList());
+        pages.forEach(p -> loaded.remove(p.getPageIndex()));
+        for (PdfiumDocumentPage prefPage: pages) {
+            prefPage.setPageIndex(prefPage.getPageIndex() - 1);
+            loaded.put(prefPage.getPageIndex(),prefPage);
+        }
+        return true;
+    }
+
+    public PdfiumDocumentPage createPage(int index, double width, double height) throws IOException {
+        checkState();
+        long pointer = PDFPageImpl.createPage(
+                getPointer(), index, width, height
+        );
+        if (pointer > 0) {
+            PdfiumDocumentPage page = new PdfiumDocumentPage(this, pointer,index);
+            List<PdfiumDocumentPage> pages = loaded.keySet().stream()
+                    .filter(k -> k >= index)
+                    .map(loaded::get)
+                    .collect(Collectors.toList());
+
+            pages.forEach(p -> loaded.remove(p.getPageIndex()));
+
+            loaded.put(index,page);
+            for (PdfiumDocumentPage prefPage: pages) {
+                prefPage.setPageIndex(prefPage.getPageIndex() + 1);
+                loaded.put(prefPage.getPageIndex(),prefPage);
+            }
+            return page;
+        }
+
+        return null;
+    }
+
 
     public int getPageCount() throws IOException {
         checkState();
@@ -120,6 +204,18 @@ public class PdfiumDocument implements Closeable {
             }
         }
         return marks;
+    }
+
+    public void write(OutputStream os) throws IOException {
+        checkState();
+        if (os == null) {
+            return;
+        }
+        PDFOutputStream pos = new PDFOutputStream(os);
+        PDFWriterImpl.writeDocument(
+                getPointer(),
+                pos
+        );
     }
 
     @Override

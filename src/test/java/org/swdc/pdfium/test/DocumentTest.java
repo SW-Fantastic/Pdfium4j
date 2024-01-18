@@ -5,6 +5,7 @@ import org.swdc.pdfium.*;
 import javax.imageio.ImageIO;
 import java.awt.image.*;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
@@ -15,7 +16,7 @@ public class DocumentTest {
 
     public static void main(String[] args) throws IOException {
 
-        PdfiumPlatform.initializePdfium(new File("assets"));
+        PdfiumPlatform.initializePdfium(new File("platform"));
 
         PdfiumDocument document = new PdfiumDocument(new File("./test2.pdf"));
         System.out.println("The document has : " + document.getPageCount() + " pages");
@@ -24,6 +25,11 @@ public class DocumentTest {
         System.out.println("Page has transparency: " + page.hasTransparency());
         System.out.println(document.getMetadata(PdfiumDocumentMetaType.Producer));
         System.out.println(page.getTitle());
+
+        for (int idx = 0 ; idx < page.getObjectCounts(); idx ++) {
+            PdfiumPageObject object = page.getPageObject(idx);
+            System.err.println(object.getObjectType().name());
+        }
 
         List<PdfiumBookMark> mark = document.getBookMark();
         for (PdfiumBookMark item: mark) {
@@ -41,6 +47,7 @@ public class DocumentTest {
         page.close();
         image.close();
 
+        document.write(new FileOutputStream("out.pdf"));
         document.close();
     }
 
