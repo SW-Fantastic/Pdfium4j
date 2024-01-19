@@ -37,4 +37,18 @@ public class PDFPageObjectImpl {
 
     public static native long createImageObject(long documentPointer);
 
+    public static native boolean loadObjectJpegData(long blockPointer, byte[] data);
+
+    public static native boolean insertObjectIntoPage(long pagePointer, long blockPointer);
+
+    public static native boolean removeObjectFromPage(long pagePointer, long blockPointer);
+
+    public static native boolean setObjectMatrix(long objPointer, float a, float b, float c, float d, float e, float f);
+
+    public static native float[] getObjectMatrix(long objPointer);
+
+    public static native long createTextObject(long documentPointer,String font,float fontSize);
+
+    public static native boolean setTextObjectString(long objPointer, String text);
+
 }

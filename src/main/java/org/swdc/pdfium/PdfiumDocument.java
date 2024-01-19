@@ -1,9 +1,6 @@
 package org.swdc.pdfium;
 
-import org.swdc.pdfium.internal.PDFDocumentImpl;
-import org.swdc.pdfium.internal.PDFOutputStream;
-import org.swdc.pdfium.internal.PDFPageImpl;
-import org.swdc.pdfium.internal.PDFWriterImpl;
+import org.swdc.pdfium.internal.*;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -204,6 +201,28 @@ public class PdfiumDocument implements Closeable {
             }
         }
         return marks;
+    }
+
+    public PdfiumImageObject createImageObject() throws IOException {
+        checkState();
+        long pointer = PDFPageObjectImpl.createImageObject(this.pointer);
+        if (pointer <= 0) {
+            return null;
+        }
+        return new PdfiumImageObject(null, pointer, -1);
+    }
+
+    public PdfiumTextObject createTextObject(String fontFamily, float fontSize) throws IOException {
+        checkState();
+        long pointer = PDFPageObjectImpl.createTextObject(
+                this.pointer,
+                fontFamily,
+                fontSize
+        );
+        if (pointer <= 0) {
+            return null;
+        }
+        return new PdfiumTextObject(null, pointer, -1);
     }
 
     public void write(OutputStream os) throws IOException {

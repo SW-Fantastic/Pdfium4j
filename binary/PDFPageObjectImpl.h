@@ -46,7 +46,63 @@ JNIEXPORT jboolean JNICALL Java_org_swdc_pdfium_internal_PDFPageObjectImpl_destr
  */
 JNIEXPORT jlong JNICALL Java_org_swdc_pdfium_internal_PDFPageObjectImpl_createImageObject
   (JNIEnv *, jclass, jlong);
-  
+
+/*
+ * Class:     org_swdc_pdfium_internal_PDFPageObjectImpl
+ * Method:    loadObjectJpegData
+ * Signature: (J[B)Z
+ */
+JNIEXPORT jboolean JNICALL Java_org_swdc_pdfium_internal_PDFPageObjectImpl_loadObjectJpegData
+  (JNIEnv *, jclass, jlong, jbyteArray);
+
+/*
+ * Class:     org_swdc_pdfium_internal_PDFPageObjectImpl
+ * Method:    insertObjectIntoPage
+ * Signature: (JJ)Z
+ */
+JNIEXPORT jboolean JNICALL Java_org_swdc_pdfium_internal_PDFPageObjectImpl_insertObjectIntoPage
+  (JNIEnv *, jclass, jlong, jlong);
+
+/*
+ * Class:     org_swdc_pdfium_internal_PDFPageObjectImpl
+ * Method:    removeObjectFromPage
+ * Signature: (JJ)Z
+ */
+JNIEXPORT jboolean JNICALL Java_org_swdc_pdfium_internal_PDFPageObjectImpl_removeObjectFromPage
+  (JNIEnv *, jclass, jlong, jlong);
+
+/*
+ * Class:     org_swdc_pdfium_internal_PDFPageObjectImpl
+ * Method:    setObjectMatrix
+ * Signature: (JFFFFFF)Z
+ */
+JNIEXPORT jboolean JNICALL Java_org_swdc_pdfium_internal_PDFPageObjectImpl_setObjectMatrix
+  (JNIEnv *, jclass, jlong, jfloat, jfloat, jfloat, jfloat, jfloat, jfloat);
+
+/*
+ * Class:     org_swdc_pdfium_internal_PDFPageObjectImpl
+ * Method:    getObjectMatrix
+ * Signature: (J)[F
+ */
+JNIEXPORT jfloatArray JNICALL Java_org_swdc_pdfium_internal_PDFPageObjectImpl_getObjectMatrix
+  (JNIEnv *, jclass, jlong);
+
+/*
+ * Class:     org_swdc_pdfium_internal_PDFPageObjectImpl
+ * Method:    createTextObject
+ * Signature: (JLjava/lang/String;F)J
+ */
+JNIEXPORT jlong JNICALL Java_org_swdc_pdfium_internal_PDFPageObjectImpl_createTextObject
+  (JNIEnv *, jclass, jlong, jstring, jfloat);
+
+/*
+ * Class:     org_swdc_pdfium_internal_PDFPageObjectImpl
+ * Method:    setTextObjectString
+ * Signature: (JLjava/lang/String;)Z
+ */
+JNIEXPORT jboolean JNICALL Java_org_swdc_pdfium_internal_PDFPageObjectImpl_setTextObjectString
+  (JNIEnv *, jclass, jlong, jstring);
+
 #ifdef __cplusplus
 }
 #endif

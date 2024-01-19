@@ -104,4 +104,5 @@ public class PDFPageImpl {
 
     public static native boolean renderBitmapImage(long pointer, long imagePointer, int x, int y, int width, int height, int rotation);
 
+    public static native boolean generateContent(long pointer);
 }

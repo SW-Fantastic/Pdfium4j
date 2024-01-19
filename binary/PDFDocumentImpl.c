@@ -3,6 +3,7 @@
 #include "Platform.h"
 #include "PDFDocumentImpl.h"
 
+JavaVM* VM;
 
 JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void* reserved) {
     JNIEnv env;
@@ -16,6 +17,7 @@ JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm, void* reserved) {
     config.m_v8EmbedderSlot = 0;
 
     FPDF_InitLibraryWithConfig(&config);
+    VM = vm;
 
     return JNI_VERSION_1_4;
 }

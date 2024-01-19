@@ -104,6 +104,14 @@ JNIEXPORT jstring JNICALL Java_org_swdc_pdfium_internal_PDFPageImpl_getPageTitle
 JNIEXPORT jboolean JNICALL Java_org_swdc_pdfium_internal_PDFPageImpl_renderBitmapImage
   (JNIEnv *, jclass, jlong, jlong, jint, jint, jint, jint, jint);
 
+/*
+ * Class:     org_swdc_pdfium_internal_PDFPageImpl
+ * Method:    generateContent
+ * Signature: (J)Z
+ */
+JNIEXPORT jboolean JNICALL Java_org_swdc_pdfium_internal_PDFPageImpl_generateContent
+  (JNIEnv *, jclass, jlong);
+
 #ifdef __cplusplus
 }
 #endif

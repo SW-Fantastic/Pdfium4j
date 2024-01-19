@@ -7,6 +7,7 @@
 #include "external/pdfium/include/fpdfview.h"
 #include "external/pdfium/include/fpdf_save.h"
 
+
 #ifdef _WIN32
 
     #pragma comment(lib, "pdfium.dll.lib")
@@ -28,5 +29,6 @@
     #define API_EXPORT extern "C"
 
 #endif
+
 
 #endif

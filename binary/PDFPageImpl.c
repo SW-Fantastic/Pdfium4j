@@ -181,8 +181,6 @@ JNIEXPORT jstring JNICALL Java_org_swdc_pdfium_internal_PDFPageImpl_getPageTitle
   }
 
 
-
-
 /*
  * Class:     org_swdc_pdfium_internal_PDFPageImpl
  * Method:    renderBitmapImage
@@ -198,4 +196,22 @@ JNIEXPORT jboolean JNICALL Java_org_swdc_pdfium_internal_PDFPageImpl_renderBitma
     FPDF_BITMAP bitmap = (FPDF_BITMAP)pointerImage;
     FPDF_RenderPageBitmap(bitmap,page,x,y,width,height,rotate,FPDF_ANNOT);
     return JNI_TRUE;
+  }
+
+
+/*
+ * Class:     org_swdc_pdfium_internal_PDFPageImpl
+ * Method:    generateContent
+ * Signature: (J)Z
+ */
+JNIEXPORT jboolean JNICALL Java_org_swdc_pdfium_internal_PDFPageImpl_generateContent
+  (JNIEnv * env , jclass clazz, jlong pointer) {
+    if(pointer == 0 || pointer == -1) {
+      return JNI_FALSE;
+    }
+    FPDF_PAGE page = (FPDF_PAGE)pointer;
+    if(FPDFPage_GenerateContent(page)) {
+      return JNI_TRUE;
+    }
+    return JNI_FALSE;
   }

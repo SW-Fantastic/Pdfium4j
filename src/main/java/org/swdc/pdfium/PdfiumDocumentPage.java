@@ -135,6 +135,13 @@ public class PdfiumDocumentPage implements Closeable {
     }
 
     // ----- Page Objects ------ //
+
+
+    public int getPageIndex() {
+        return pageIndex;
+    }
+
+    // ----- Page Objects ------ //
     public int getObjectCounts() throws IOException {
         checkState();
         return PDFPageObjectImpl.getObjectCount(pointer);
@@ -153,7 +160,20 @@ public class PdfiumDocumentPage implements Closeable {
         if (pointer <= 0) {
             return null;
         }
-        PdfiumPageObject object = new PdfiumPageObject(this, pointer,objectIndex);
+        PageObjectType type = PageObjectType.of(
+                PDFPageObjectImpl.getPageObjectType(pointer)
+        );
+        PdfiumPageObject object;
+        switch (type) {
+            case IMAGE: {
+                object = new PdfiumImageObject(this, pointer, objectIndex);
+                break;
+            }
+            default: {
+                object = new PdfiumPageObject(this, pointer, objectIndex);
+                break;
+            }
+        }
         objectMap.put(objectIndex,object);
         return object;
     }
@@ -162,7 +182,52 @@ public class PdfiumDocumentPage implements Closeable {
         objectMap.remove(objectIndex);
     }
 
-    public int getPageIndex() {
-        return pageIndex;
+    public boolean removeObject(PdfiumImageObject pageObject) throws IOException {
+        checkState();
+        if (pageObject == null) {
+            return false;
+        } else {
+            pageObject.checkState();
+        }
+        if (pageObject.getOwner() != this) {
+            return false;
+        }
+        boolean result = PDFPageObjectImpl.removeObjectFromPage(
+                this.getPointer(),
+                pageObject.getPointer()
+        );
+        if (result) {
+            pageObject.close();
+        }
+        return result;
+    }
+
+    public boolean insertObject(PdfiumPageObject pageObject) throws IOException {
+        checkState();
+        if (pageObject == null) {
+            return false;
+        } else {
+            pageObject.checkState();
+        }
+        if (pageObject.hasOwner()) {
+            return false;
+        }
+        boolean result = PDFPageObjectImpl.insertObjectIntoPage(
+                this.getPointer(),
+                pageObject.getPointer()
+        );
+        if (result) {
+            int index = getObjectCounts() - 1;
+            pageObject.initOwner(this, index);
+            objectMap.put(index, pageObject);
+        }
+        return result;
+    }
+
+    public boolean generateContent() throws IOException {
+        checkState();
+        return PDFPageImpl.generateContent(
+                getPointer()
+        );
     }
 }

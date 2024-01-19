@@ -16,10 +16,25 @@ public class DocumentEditTest {
     public static void main(String[] args) throws IOException {
 
         PdfiumPlatform.initializePdfium(new File("assets"));
+
         PdfiumDocument document = new PdfiumDocument();
 
         PdfiumDocumentPage page = document.createPage(0, 500, 600);
+        PdfiumImageObject object = document.createImageObject();
+        if(object.loadImageFile(new File("test.jpg"))) {
+            object.setBounds(120, 160, 0, 0);
+            page.insertObject(object);
+        }
+
+
+        PdfiumTextObject text = document.createTextObject("Arial", 0.25f);
+        text.setText("Demo String");
+        text.setBounds(100, 80, 0, 200);
+        page.insertObject(text);
+
+        page.generateContent();
         page.close();
+
 
         document.write(new FileOutputStream("demo.pdf"));
         document.close();
