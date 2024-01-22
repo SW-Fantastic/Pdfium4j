@@ -49,6 +49,20 @@ public class PDFPageObjectImpl {
 
     public static native long createTextObject(long documentPointer,String font,float fontSize);
 
+    public static native float getFontSize(long objPointer);
+
     public static native boolean setTextObjectString(long objPointer, String text);
+
+    public static native byte[] getTextObjectString(long objPointer, long pageObjectPointer);
+
+    public static native long createFont(long documentPointer, byte[] fontData, int fontType);
+
+    public static native long createTextObjectByFont(long documentPointer, long fontPointer, float fontSize);
+
+    public static native String getFontName(long fontPointer);
+
+    public static native boolean isFontEmbedded(long fontPointer);
+
+    public static native boolean closeFont(long fontPointer);
 
 }

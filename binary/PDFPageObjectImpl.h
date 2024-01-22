@@ -97,11 +97,69 @@ JNIEXPORT jlong JNICALL Java_org_swdc_pdfium_internal_PDFPageObjectImpl_createTe
 
 /*
  * Class:     org_swdc_pdfium_internal_PDFPageObjectImpl
+ * Method:    getFontSize
+ * Signature: (J)F
+ */
+JNIEXPORT jfloat JNICALL Java_org_swdc_pdfium_internal_PDFPageObjectImpl_getFontSize
+  (JNIEnv *, jclass, jlong);
+
+/*
+ * Class:     org_swdc_pdfium_internal_PDFPageObjectImpl
  * Method:    setTextObjectString
  * Signature: (JLjava/lang/String;)Z
  */
 JNIEXPORT jboolean JNICALL Java_org_swdc_pdfium_internal_PDFPageObjectImpl_setTextObjectString
   (JNIEnv *, jclass, jlong, jstring);
+
+/*
+ * Class:     org_swdc_pdfium_internal_PDFPageObjectImpl
+ * Method:    getTextObjectString
+ * Signature: (JJ)[B
+ */
+JNIEXPORT jbyteArray JNICALL Java_org_swdc_pdfium_internal_PDFPageObjectImpl_getTextObjectString
+  (JNIEnv *, jclass, jlong, jlong);
+
+/*
+ * Class:     org_swdc_pdfium_internal_PDFPageObjectImpl
+ * Method:    createFont
+ * Signature: (J[BI)J
+ */
+JNIEXPORT jlong JNICALL Java_org_swdc_pdfium_internal_PDFPageObjectImpl_createFont
+  (JNIEnv *, jclass, jlong, jbyteArray, jint);
+
+/*
+ * Class:     org_swdc_pdfium_internal_PDFPageObjectImpl
+ * Method:    createTextObjectByFont
+ * Signature: (JJF)J
+ */
+JNIEXPORT jlong JNICALL Java_org_swdc_pdfium_internal_PDFPageObjectImpl_createTextObjectByFont
+  (JNIEnv *, jclass, jlong, jlong, jfloat);
+
+
+/*
+ * Class:     org_swdc_pdfium_internal_PDFPageObjectImpl
+ * Method:    getFontName
+ * Signature: (J)Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_org_swdc_pdfium_internal_PDFPageObjectImpl_getFontName
+  (JNIEnv *, jclass, jlong);
+
+/*
+ * Class:     org_swdc_pdfium_internal_PDFPageObjectImpl
+ * Method:    isFontEmbedded
+ * Signature: (J)Z
+ */
+JNIEXPORT jboolean JNICALL Java_org_swdc_pdfium_internal_PDFPageObjectImpl_isFontEmbedded
+  (JNIEnv *, jclass, jlong);
+
+
+/*
+ * Class:     org_swdc_pdfium_internal_PDFPageObjectImpl
+ * Method:    closeFont
+ * Signature: (J)Z
+ */
+JNIEXPORT jboolean JNICALL Java_org_swdc_pdfium_internal_PDFPageObjectImpl_closeFont
+  (JNIEnv *, jclass, jlong);
 
 #ifdef __cplusplus
 }

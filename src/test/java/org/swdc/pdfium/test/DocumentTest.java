@@ -28,6 +28,10 @@ public class DocumentTest {
 
         for (int idx = 0 ; idx < page.getObjectCounts(); idx ++) {
             PdfiumPageObject object = page.getPageObject(idx);
+            if (object instanceof PdfiumTextObject) {
+                PdfiumTextObject text = (PdfiumTextObject)object;
+                System.err.println(text.getText());
+            }
             System.err.println(object.getObjectType().name());
         }
 

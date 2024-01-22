@@ -19,18 +19,30 @@ public class DocumentEditTest {
 
         PdfiumDocument document = new PdfiumDocument();
 
+
         PdfiumDocumentPage page = document.createPage(0, 500, 600);
         PdfiumImageObject object = document.createImageObject();
-        if(object.loadImageFile(new File("test.jpg"))) {
+        if(object.loadImageFile(new File("testf.png"))) {
             object.setBounds(120, 160, 0, 0);
             page.insertObject(object);
         }
 
+        PdfiumFont font = document.loadFont(new File("font.ttf"));
+        PdfiumTextObject textObject = document.createTextObject(font, 0.15f);
+        textObject.setText("测试文本");
+        textObject.setBounds(100, 80, 100, 400);
+        page.insertObject(textObject);
+        System.err.println(textObject.getText());
+        System.err.println(font.getFontName());
+        System.err.println("font embedded : " + font.isEmbedded());
+        System.err.println("font size : " + textObject.getFontSize());
+        font.close();
 
         PdfiumTextObject text = document.createTextObject("Arial", 0.25f);
         text.setText("Demo String");
         text.setBounds(100, 80, 0, 200);
         page.insertObject(text);
+        System.err.println(text.getText());
 
         page.generateContent();
         page.close();

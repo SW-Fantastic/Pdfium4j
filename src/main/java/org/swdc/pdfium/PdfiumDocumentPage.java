@@ -169,6 +169,10 @@ public class PdfiumDocumentPage implements Closeable {
                 object = new PdfiumImageObject(this, pointer, objectIndex);
                 break;
             }
+            case TEXT: {
+                object = new PdfiumTextObject(this,pointer, objectIndex);
+                break;
+            }
             default: {
                 object = new PdfiumPageObject(this, pointer, objectIndex);
                 break;

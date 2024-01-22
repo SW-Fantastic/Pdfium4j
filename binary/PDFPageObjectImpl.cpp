@@ -275,6 +275,27 @@ JNIEXPORT jlong JNICALL Java_org_swdc_pdfium_internal_PDFPageObjectImpl_createIm
 
       return NULL;
     }
+    
+/*
+ * Class:     org_swdc_pdfium_internal_PDFPageObjectImpl
+ * Method:    getFontSize
+ * Signature: (J)F
+ */
+JNIEXPORT jfloat JNICALL Java_org_swdc_pdfium_internal_PDFPageObjectImpl_getFontSize
+  (JNIEnv * env, jclass clazz, jlong objPointer) {
+
+    if(objPointer == 0 || objPointer == -1) {
+      return -1;
+    }
+    
+    FPDF_PAGEOBJECT object = (FPDF_PAGEOBJECT)objPointer;
+    float size;
+    if(FPDFTextObj_GetFontSize(object,&size)) {
+      return size;
+    }
+    return -1;
+  }
+
 
     /*
    * Class:     org_swdc_pdfium_internal_PDFPageObjectImpl
@@ -296,3 +317,146 @@ JNIEXPORT jlong JNICALL Java_org_swdc_pdfium_internal_PDFPageObjectImpl_createIm
 
       return rst ? JNI_TRUE : JNI_FALSE;
     }
+
+/*
+ * Class:     org_swdc_pdfium_internal_PDFPageObjectImpl
+ * Method:    getTextObjectString
+ * Signature: (JJ)[B
+ */
+JNIEXPORT jbyteArray JNICALL Java_org_swdc_pdfium_internal_PDFPageObjectImpl_getTextObjectString
+  (JNIEnv * env, jclass clazz, jlong objPointer, jlong pagePointer) {
+
+    if(objPointer == 0 || objPointer == -1) {
+      return NULL;
+    }
+    if(pagePointer == 0 || pagePointer == -1) {
+      return NULL;
+    }
+
+    FPDF_PAGEOBJECT object = (FPDF_PAGEOBJECT)objPointer;
+    FPDF_PAGE page = (FPDF_PAGE)pagePointer;
+
+    FPDF_TEXTPAGE txtPage = FPDFText_LoadPage(page);
+    int size = FPDFTextObj_GetText(object,txtPage,NULL,0);
+    if(size) {
+    
+      FPDF_WCHAR * str = (FPDF_WCHAR*)malloc(sizeof(FPDF_WCHAR) * size);
+      if(FPDFTextObj_GetText(object,txtPage,(FPDF_WCHAR*)str,size)) {
+        jbyteArray arr = env->NewByteArray(size * sizeof(FPDF_WCHAR));
+        env->SetByteArrayRegion(arr,0,size * sizeof(FPDF_WCHAR),(jbyte*)str);
+        FPDFText_ClosePage(txtPage);
+        free(str);
+        return arr;
+      }
+    }
+    FPDFText_ClosePage(txtPage);
+    return NULL;
+
+  }
+
+/*
+ * Class:     org_swdc_pdfium_internal_PDFPageObjectImpl
+ * Method:    createFont
+ * Signature: (J[BII)J
+ */
+JNIEXPORT jlong JNICALL Java_org_swdc_pdfium_internal_PDFPageObjectImpl_createFont
+  (JNIEnv * env, jclass clazz, jlong documentPointer, jbyteArray data, jint fontType){
+
+    if(documentPointer == 0 || documentPointer == -1) {
+      return -1;
+    }
+
+    jbyte* cdata = env->GetByteArrayElements(data,NULL);
+    FPDF_DOCUMENT document = (FPDF_DOCUMENT)documentPointer;
+    int length = env->GetArrayLength(data);
+    FPDF_FONT font = FPDFText_LoadFont(document,(uint8_t*)cdata,length,fontType,1);
+    env->ReleaseByteArrayElements(data,cdata,NULL);
+    if(font) {
+      return (jlong)(intptr_t)(font);
+    }
+    return -1;
+  }
+
+/*
+ * Class:     org_swdc_pdfium_internal_PDFPageObjectImpl
+ * Method:    createTextObjectByFont
+ * Signature: (JJF)J
+ */
+JNIEXPORT jlong JNICALL Java_org_swdc_pdfium_internal_PDFPageObjectImpl_createTextObjectByFont
+  (JNIEnv * env, jclass clazz, jlong documentPointer, jlong fontPointer, jfloat fontSize) {
+
+    if(documentPointer == 0 || documentPointer == -1) {
+      return -1;
+    }
+    if(fontPointer == 0 || fontPointer == -1) {
+      return -1;
+    }
+
+    FPDF_DOCUMENT document = (FPDF_DOCUMENT)documentPointer;
+    FPDF_FONT font = (FPDF_FONT)fontPointer;
+    FPDF_PAGEOBJECT obj = FPDFPageObj_CreateTextObj(document,font,fontSize);
+    if(obj) {
+      return (jlong)(intptr_t)(obj);
+    }
+    return -1;
+  }
+
+/*
+ * Class:     org_swdc_pdfium_internal_PDFPageObjectImpl
+ * Method:    isFontEmbedded
+ * Signature: (J)Z
+ */
+JNIEXPORT jboolean JNICALL Java_org_swdc_pdfium_internal_PDFPageObjectImpl_isFontEmbedded
+  (JNIEnv * env, jclass clazz, jlong fontPointer) {
+
+    if(fontPointer == 0 || fontPointer == -1) {
+      return JNI_FALSE;
+    }
+
+    FPDF_FONT font = (FPDF_FONT)fontPointer;
+    if(FPDFFont_GetIsEmbedded(font)) {
+      return JNI_TRUE;
+    }
+    return JNI_FALSE;
+  }
+
+
+
+/*
+ * Class:     org_swdc_pdfium_internal_PDFPageObjectImpl
+ * Method:    getFontName
+ * Signature: (J)Ljava/lang/String;
+ */
+JNIEXPORT jstring JNICALL Java_org_swdc_pdfium_internal_PDFPageObjectImpl_getFontName
+  (JNIEnv * env, jclass clazz, jlong fontPointer) {
+
+    if(fontPointer == 0 || fontPointer == -1) {
+      return NULL;
+    }
+    FPDF_FONT font = (FPDF_FONT)fontPointer;
+    int size = FPDFFont_GetFontName(font,NULL,0);
+    if(size) {
+      char * nameStr = (char*)malloc(sizeof(char) * size);
+      FPDFFont_GetFontName(font,nameStr,size);
+      jstring str = env->NewStringUTF(nameStr);
+      free(nameStr);
+      return str;
+    }
+    return NULL;
+  }
+
+/*
+ * Class:     org_swdc_pdfium_internal_PDFPageObjectImpl
+ * Method:    closeFont
+ * Signature: (J)Z
+ */
+JNIEXPORT jboolean JNICALL Java_org_swdc_pdfium_internal_PDFPageObjectImpl_closeFont
+  (JNIEnv * env, jclass clazz, jlong fontPointer) {
+
+    if(fontPointer == 0 || fontPointer == -1) {
+      return JNI_FALSE;
+    }
+    FPDF_FONT font = (FPDF_FONT)fontPointer;
+    FPDFFont_Close(font);
+    return JNI_TRUE;
+  } 

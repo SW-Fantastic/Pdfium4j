@@ -3,6 +3,7 @@ package org.swdc.pdfium;
 import org.swdc.pdfium.internal.*;
 
 import java.io.*;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -223,6 +224,38 @@ public class PdfiumDocument implements Closeable {
             return null;
         }
         return new PdfiumTextObject(null, pointer, -1);
+    }
+
+    public PdfiumTextObject createTextObject(PdfiumFont font, float fontSize) throws IOException {
+        checkState();
+        if (font == null || fontSize < 0) {
+            return null;
+        }
+        long pointer = PDFPageObjectImpl.createTextObjectByFont(
+                getPointer(),
+                font.getPointer() ,
+                fontSize
+        );
+        if (pointer <= 0) {
+            return null;
+        }
+        return new PdfiumTextObject(null,pointer,-1);
+    }
+
+    public PdfiumFont loadFont(File font) throws IOException {
+        checkState();
+        if (!font.exists()) {
+            return null;
+        }
+        String name = font.getName().toLowerCase();
+        byte[] data = Files.readAllBytes(font.toPath());
+        long fontPointer = PDFPageObjectImpl.createFont(
+                pointer, data, name.endsWith("ttf") ? 2 : 1
+        );
+        if (fontPointer <= 0) {
+            return null;
+        }
+        return new PdfiumFont(fontPointer);
     }
 
     public void write(OutputStream os) throws IOException {

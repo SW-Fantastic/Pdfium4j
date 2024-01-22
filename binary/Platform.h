@@ -3,6 +3,7 @@
 
 
 #include "external/pdfium/include/fpdf_doc.h"
+#include "external/pdfium/include/fpdf_text.h"
 #include "external/pdfium/include/fpdf_edit.h"
 #include "external/pdfium/include/fpdfview.h"
 #include "external/pdfium/include/fpdf_save.h"
