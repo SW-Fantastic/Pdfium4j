@@ -23,7 +23,7 @@ public class DocumentTest {
         PdfiumDocumentPage page = document.getPage(1);
         System.out.println("Page width: " + page.getWidthF() + " height: " + page.getHeightF());
         System.out.println("Page has transparency: " + page.hasTransparency());
-        System.out.println(document.getMetadata(PdfiumDocumentMetaType.Producer));
+        System.out.println(document.getMetadata(PdfiumDocumentMetaType.CreationDate));
         System.out.println(page.getTitle());
 
         for (int idx = 0 ; idx < page.getObjectCounts(); idx ++) {

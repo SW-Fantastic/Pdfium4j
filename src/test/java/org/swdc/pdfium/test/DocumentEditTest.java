@@ -22,7 +22,7 @@ public class DocumentEditTest {
 
         PdfiumDocumentPage page = document.createPage(0, 500, 600);
         PdfiumImageObject object = document.createImageObject();
-        if(object.loadImageFile(new File("testf.png"))) {
+        if(object.loadImageFile(new File("test.jpg"))) {
             object.setBounds(120, 160, 0, 0);
             page.insertObject(object);
         }
@@ -43,6 +43,11 @@ public class DocumentEditTest {
         text.setBounds(100, 80, 0, 200);
         page.insertObject(text);
         System.err.println(text.getText());
+
+        OutputStream os = Files.newOutputStream(Paths.get("test2.png"));
+        PdfiumBitmapImage image = page.renderPage(4);
+        BufferedImage image1 = image.createBufferedImage();
+        ImageIO.write(image1,"png" ,os );
 
         page.generateContent();
         page.close();
