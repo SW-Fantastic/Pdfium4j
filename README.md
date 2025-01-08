@@ -3,9 +3,12 @@
 > this project has move to cpp-presets .
 > 本项目已经迁移到cpp-presets项目中，对该项目感兴趣请移步：
 > 下面的链接是核心库，它直接封装了C++项目，使用时请注意内存问题。
+> 
 > https://github.com/SW-Fantastic/cpp-presets/tree/master/pdfium
+> 
 > 下面的链接是Java封装，可以直接使用，当然目前并不完善，还请耐心等待。
-> 这个库我也会在合适的时候，为它编写响应的文档和说明
+> 这个库我也会在合适的时候，为它编写响应的文档和说明。
+> 
 > https://github.com/SW-Fantastic/cpp-presets/tree/master/pdfium4j
 
 
